@@ -21,14 +21,7 @@ PACKAGES
 --------
 
 This package includes:
-- Gaussian Blur
-- Black Scholes
-- Linear Search
-- Grayscale
-- SIFT
-- Runlength
-- Back Projection
-- Monte Carlo
+- Blackscholes
 
 ALL WORKLOADS COMPILATION
 -------------------------
