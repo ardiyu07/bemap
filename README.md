@@ -36,12 +36,17 @@ ALL WORKLOADS COMPILATION
 To build all projects in one compilation, do the following:
 (You have to ensure that at least cmake 2.8.x is installed)
 
+    $ mkdir build
     $ cd build
     $ cmake ../
     $ make
 
 After the above commands, all binaries will then be installed
 to bin/ folder
+
+REQUIREMENTS
+------------
+CMake 2.8.x
 
 OTHERS
 ------
