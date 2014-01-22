@@ -1,0 +1,17 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+PROJECT(BEMAP)
+
+SET(TOPDIR ${CMAKE_CURRENT_SOURCE_DIR})
+INCLUDE(BEMAPConfig.cmake)
+
+ADD_SUBDIRECTORY(src/BlackScholes)
+
+# ADD_DEPENDENCIES?
+
+IF(UNIX OR APPLE)
+	ADD_CUSTOM_TARGET(clean_all
+	  ${CMAKE_COMMAND} -E remove -f CMakeCache.txt
+	  ${CMAKE_COMMAND} -E remove -f ${TOPDIR}/bin/*
+	  COMMAND make clean
+	  COMMENT "Cleaning CMakeCache.txt and binaries")
+ENDIF()
