@@ -12,9 +12,8 @@ help option. The exact implementation in native code (C++) is also
 provided in each project folder for reference.
 
 By analyzing these benchmarks, we may analyze:
-1. How to tune/optimize the auto-parallelizer's compiler
-2. Whether the appropriate optimization procedure is provided 
-   within the compiler
+- How to tune/optimize the auto-parallelizer's compiler
+- Whether the appropriate optimization procedure is provided within the compiler
 
 This project is taken from [sourceForge site of bemap](http://sourceforge.net/projects/bemap/).
 
@@ -47,4 +46,4 @@ to bin/ folder
 OTHERS
 ------
 
-* Please refer to each project's README for more information
+Please refer to each project's README for more information
