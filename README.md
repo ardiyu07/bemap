@@ -15,7 +15,7 @@ By analyzing these benchmarks, we may analyze:
 - How to tune/optimize the auto-parallelizer's compiler
 - Whether the appropriate optimization procedure is provided within the compiler
 
-This project is taken from [sourceForge site of bemap](http://sourceforge.net/projects/bemap/).
+This project is derived from [sourceForge site of bemap](http://sourceforge.net/projects/bemap/).
 
 PACKAGES
 --------
