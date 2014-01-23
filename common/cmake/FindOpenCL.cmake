@@ -85,18 +85,59 @@ ELSE (APPLE)
     
   ELSE (WIN32)
 
+    IF((NOT "$ENV{CUDA_PATH}" STREQUAL "") AND OPENCL_NVIDIA_ENABLE)
+      # Nvidia OpenCL
+      IF(CMAKE_CL_64)
+        SET(OPENCL_LIB_DIR "$ENV{CUDA_PATH}/OpenCL/common/lib/x64")
+      ELSEIF(NOT CMAKE_CL_64)
+        SET(OPENCL_LIB_DIR "$ENV{CUDA_PATH}/OpenCL/common/lib/Win32")
+      ELSE()
+        MESSAGE(FATAL_ERROR "Error : Could not determine build platform.") 
+      ENDIF()
+
+      FIND_LIBRARY(OPENCL_LIB_DIR OpenCL.lib ${OPENCL_LIB_DIR})
+      SET(_OPENCL_INC_CAND "$ENV{CUDA_INC_PATH}")
+    ELSEIF((NOT "$ENV{AMDAPPSDKROOT}" STREQUAL "") AND OPENCL_AMD_ENABLE)
+      # The AMD SDK currently installs both x86 and x86_64 libraries
+      # This is only a hack to find out architecture
+      IF(CMAKE_CL_64)
+	SET(OPENCL_LIB_DIR "$ENV{AMDAPPSDKROOT}/lib/x86_64")
+      ELSEIF(NOT CMAKE_CL_64)
+	SET(OPENCL_LIB_DIR "$ENV{AMDAPPSDKROOT}/lib/x86")
+      ELSE()
+        MESSAGE(FATAL_ERROR "Error : Could not determine build platform.")
+      ENDIF()
+      FIND_LIBRARY(OPENCL_LIBRARIES OpenCL.lib ${OPENCL_LIB_DIR})
+
+      GET_FILENAME_COMPONENT(_OPENCL_INC_CAND ${OPENCL_LIB_DIR}/../../include ABSOLUTE)
+    ELSEIF((NOT "$ENV{INTELOCLSDKROOT}" STREQUAL "") AND OPENCL_INTEL_ENABLE)
+      # Intel OpenCL
+      IF(CMAKE_CL_64)
+	SET(OPENCL_LIB_DIR "$ENV{INTELOCLSDKROOT}/lib/x64")
+      ELSEIF(NOT CMAKE_CL_64)
+	SET(OPENCL_LIB_DIR "$ENV{INTELOCLSDKROOT}/lib/x86")
+      ELSE()
+        MESSAGE(FATAL_ERROR "Error : Could not determine build platform.")
+      ENDIF()
+      FIND_LIBRARY(OPENCL_LIBRARIES OpenCL.lib ${OPENCL_LIB_DIR})
+
+      GET_FILENAME_COMPONENT(_OPENCL_INC_CAND ${OPENCL_LIB_DIR}/../../include ABSOLUTE)
+    ELSE ()
+      MESSAGE(FATAL_ERROR "Error : Could not find build platform.")
+    ENDIF()
+
     # Unix style platforms
     FIND_LIBRARY(OPENCL_LIBRARIES OpenCL
       ENV LD_LIBRARY_PATH
+      ${OPENCL_LIB_DIR}
       )
 
     GET_FILENAME_COMPONENT(OPENCL_LIB_DIR ${OPENCL_LIBRARIES} PATH)
     GET_FILENAME_COMPONENT(_OPENCL_INC_CAND ${OPENCL_LIB_DIR}/../../include ABSOLUTE)
 
-    # The AMD SDK currently does not place its headers
-    # in /usr/include, therefore also search relative
-    # to the library
-    FIND_PATH(OPENCL_INCLUDE_DIRS CL/cl.h PATHS ${_OPENCL_INC_CAND} "/usr/local/cuda/include")
+    # Therefore also search alternative
+    # to the include headers
+    FIND_PATH(OPENCL_INCLUDE_DIRS CL/cl.h PATHS ${_OPENCL_INC_CAND} "/usr/local/cuda/include" "$ENV{AMDAPPSDKROOT}/include")
     FIND_PATH(_OPENCL_CPP_INCLUDE_DIRS CL/cl.hpp PATHS ${_OPENCL_INC_CAND} "/usr/local/cuda/include")
 
   ENDIF (WIN32)
