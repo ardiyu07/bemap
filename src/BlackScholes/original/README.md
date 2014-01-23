@@ -1,21 +1,24 @@
 BlackScholes, Reference Single Thread C++
 =========================================
 
-** Read LICENSE first
+* Read LICENSE first
  
-** Compilation (all projects) in build/
+* Compilation (all projects) in build/
+
     $ cd /path/to/bemap
     $ cd build/
     $ cmake ../
     $ make
 
-** Compilation (only this project) in TestRun
+* Compilation (only this project) in TestRun
+
     $ cd /path/to/BlackScholes/original/
     $ cd TestRun
     $ cmake ../
     $ make
 
-** Usage:
+* Usage:
+
     ./BlackScholes_ref -h
     ./BlackScholes_ref [--verbose|-v] [--help|-h] [--output|-o FILENAME]
          [--optnum|-O NUMBER] [--riskfree|-R NUMBER] [--volatility|-V NUMBER]
