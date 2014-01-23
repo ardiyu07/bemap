@@ -39,9 +39,14 @@ to bin/ folder
 
 REQUIREMENTS
 ------------
-CMake 2.8.x
+* CMake 2.8.x
+
+* OpenCL SDK
+  * Intel  : http://software.intel.com/en-us/articles/vcsource-tools-opencl-sdk/
+  * AMD    : http://developer.amd.com/zones/openclzone/Pages/default.aspx
+  * NVIDIA : http://developer.nvidia.com/opencl
 
 OTHERS
 ------
 
-Please refer to each project's README for more information
+Please refer to each project's README.md for more information
