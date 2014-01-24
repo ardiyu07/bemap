@@ -23,6 +23,15 @@ PACKAGES
 This package includes:
 - Blackscholes
 
+REQUIREMENTS
+------------
+* CMake 2.8.x
+
+* OpenCL SDK
+  * Intel  : http://software.intel.com/en-us/articles/vcsource-tools-opencl-sdk/
+  * AMD    : http://developer.amd.com/zones/openclzone/Pages/default.aspx
+  * NVIDIA : http://developer.nvidia.com/opencl
+
 ALL WORKLOADS COMPILATION
 -------------------------
 
@@ -38,7 +47,7 @@ $ make
 After the above commands, all binaries will then be installed
 to bin/ folder
 
-# Building in Windows
+### Building in Windows
 
 Building in Windows with CMake needs the MS Visual Studio cmake files generator (and also requires Visual Studio to be installed). 
 
@@ -66,22 +75,12 @@ Which may be:
 * 10 Win64
 * 11 Win64
 
-or by using `nmake`
+The above command will create a Visual Studio solution file.
+It can also be done by using `nmake`, for example for building in a Cygwin environment.
 
 ```
 $ cmake -G NMake\ Makefiles
 ```
-
-The above command will create a Visual Studio solution file.
-
-REQUIREMENTS
-------------
-* CMake 2.8.x
-
-* OpenCL SDK
-  * Intel  : http://software.intel.com/en-us/articles/vcsource-tools-opencl-sdk/
-  * AMD    : http://developer.amd.com/zones/openclzone/Pages/default.aspx
-  * NVIDIA : http://developer.nvidia.com/opencl
 
 OTHERS
 ------
