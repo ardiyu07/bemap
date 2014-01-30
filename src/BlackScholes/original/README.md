@@ -5,25 +5,25 @@ BlackScholes, Reference Single Thread C++
  
 * Compilation (all projects) in build/
 
-````
+```
 $ cd /path/to/bemap
 $ cd build/
 $ cmake ../
 $ make
-````
+```
 
 * Compilation (only this project) in TestRun
 
-````
+```
 $ cd /path/to/BlackScholes/original/
 $ cd TestRun
 $ cmake ../
 $ make
-````
+```
 
 * Usage:
 
-````
+```
 ./BlackScholes_ref -h
 ./BlackScholes_ref [--verbose|-v] [--help|-h] [--output|-o FILENAME]
      [--optnum|-O NUMBER] [--riskfree|-R NUMBER] [--volatility|-V NUMBER]
@@ -41,4 +41,4 @@ $ make
  * Examples *
 ./BlackScholes_ref [OPTS...] -v
 ./BlackScholes_ref [OPTS...] -v -O 4194304
-````
+```
