@@ -6,6 +6,7 @@ INCLUDE(BEMAPConfig.cmake)
 
 ADD_SUBDIRECTORY(src/BlackScholes)
 ADD_SUBDIRECTORY(src/GrayScale)
+ADD_SUBDIRECTORY(src/GaussianFilter)
 
 # ADD_DEPENDENCIES?
 
