@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Clean executables first
+if [ -f Makefile ]; then
+make clean
+fi
+
+rm -rf CMake* *.cmake core* gmon.out *~ *.o *.exe Makefile *.cl *common.hpp
