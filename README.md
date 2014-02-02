@@ -22,6 +22,8 @@ PACKAGES
 
 This package includes:
 - Blackscholes
+- GrayScale
+- GaussianFilter
 
 REQUIREMENTS
 ------------
@@ -31,6 +33,14 @@ REQUIREMENTS
   * Intel  : http://software.intel.com/en-us/articles/vcsource-tools-opencl-sdk/
   * AMD    : http://developer.amd.com/zones/openclzone/Pages/default.aspx
   * NVIDIA : http://developer.nvidia.com/opencl
+
+* After the SDK installation, make sure you have set the SDK path correctly
+  * For Intel SDK (Below is just an example using default Intel OpenCL SDK path)
+    `export INTELOCLSDKROOT=/opt/intel/opencl/`
+  * For AMD SDK (Below is just an example using default AMD APP SDK path)
+    `export AMDAPPSDKROOT=/opt/AMDAPP/`
+  * For NVIDIA SDK (Below is just an example using default CUDA Path)
+    `export CUDA_PATH=/usr/local/cuda/`
 
 ALL WORKLOADS COMPILATION
 -------------------------
@@ -51,16 +61,11 @@ to bin/ folder
 
 Building in Windows with CMake needs the MS Visual Studio cmake files generator (and also requires Visual Studio to be installed). 
 
-For 32-bit build, bemap can be compiled using the following commands.
 ```
-$ cmake -G Visual\ Studio\ XX
+$ cmake -G XX
 ```
 
-For 64-bit build,
-```
-$ cmake -G Visual\ Studio\ XX\ Win64
-```
-**XX** is MSVC's version. 
+**XX** is MSVC's version. (xx64 is for 64-bit build)
 Which may be:
 * 6
 * 7
