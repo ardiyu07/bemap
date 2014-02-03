@@ -1,8 +1,13 @@
 # Set environment variables for building purpose
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${TOPDIR}/common/cmake/)
-SET(BEMAP_BINARY_DIR ${TOPDIR}/bin/)
 SET(BEMAP_DATAFILES ${TOPDIR}/common/data/)
 SET(BEMAP_INCLUDE_DIRECTORIES ${TOPDIR}/common/inc/)
+
+# Set binary directory
+IF (NOT EXISTS ${TOPDIR}/bin/)
+  FILE(MAKE_DIRECTORY ${TOPDIR}/bin/)
+ENDIF()
+SET(BEMAP_BINARY_DIR ${TOPDIR}/bin/)
 
 # Set flag
 IF(UNIX OR APPLE)
