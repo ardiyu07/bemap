@@ -9,6 +9,17 @@ IF (NOT EXISTS ${TOPDIR}/bin/)
 ENDIF()
 SET(BEMAP_BINARY_DIR ${TOPDIR}/bin/)
 
+# Set CUDA variables
+IF(BUILD_CUDA)
+  FIND_PATH(CUDA_INCLUDE_DIRS
+    NAMES cuda.h cuda_runtime_api.h
+    HINTS /usr/local/cuda/include/ 
+    )
+  
+  # Set NVCC Flags
+  SET(CUDA_NVCC_FLAGS -O3 -gencode arch=compute_10,code=sm_10 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -lpthread) 
+ENDIF()
+
 # Set flag
 IF(UNIX OR APPLE)
   SET (CMAKE_C_FLAGS "-O3 -g -w")
