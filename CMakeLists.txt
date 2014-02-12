@@ -10,6 +10,7 @@ ADD_SUBDIRECTORY(src/BlackScholes)
 ADD_SUBDIRECTORY(src/GrayScale)
 ADD_SUBDIRECTORY(src/GaussianFilter)
 ADD_SUBDIRECTORY(src/MonteCarlo)
+ADD_SUBDIRECTORY(src/BackProjection)
 
 # User options
 
