@@ -1,7 +1,7 @@
 GrayScale, OpenCL Implementation
 ===================================
 
-* Read LICENSE.txt first
+* Read LICENSE first
 * Input data is provided in the common/ folder 
 
 * Prerequisites

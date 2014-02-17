@@ -1,7 +1,8 @@
 GaussianFilter, CUDA Implementation
 ===================================
 
-* Read LICENSE.txt first
+* Read LICENSE first
+
 * Prerequisites
   * CMake 2.8.x
   * CUDA Toolkit

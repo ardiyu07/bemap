@@ -1,7 +1,7 @@
 BackProjection, CUDA Implementation
 ===================================
 
-* Read LICENSE.txt first
+* Read LICENSE first
 * Compilation (all projects) in build/ 
 ```
 $ cd /path/to/bemap

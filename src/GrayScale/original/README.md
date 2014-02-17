@@ -1,7 +1,7 @@
 GrayScale, Reference Single Thread C++
 =========================================
 
-* Read LICENSE.txt first
+* Read LICENSE first
 * Input data is provided in the common/ folder 
 * Compilation (all projects) in build/
 ```
