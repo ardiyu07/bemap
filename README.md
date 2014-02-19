@@ -21,9 +21,11 @@ PACKAGES
 --------
 
 This package includes:
-- Blackscholes
+- Blackscholes for European Call/Put
 - GrayScale
 - GaussianFilter
+- BackProjection
+- MonteCarlo for European Call/Put
 
 REQUIREMENTS
 ------------
