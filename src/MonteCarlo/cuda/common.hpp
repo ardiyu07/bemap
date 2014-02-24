@@ -1,0 +1,3 @@
+/// 2 * PI
+#define NTHREADS 128
+#define M_PI2 6.283185307179586
