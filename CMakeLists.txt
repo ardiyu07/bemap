@@ -5,7 +5,6 @@ SET(TOPDIR ${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE(BEMAPConfig.cmake)
 
 # Build Samples
-
 ADD_SUBDIRECTORY(src/BlackScholes)
 ADD_SUBDIRECTORY(src/GrayScale)
 ADD_SUBDIRECTORY(src/GaussianFilter)
@@ -13,7 +12,8 @@ ADD_SUBDIRECTORY(src/MonteCarlo)
 ADD_SUBDIRECTORY(src/BackProjection)
 
 # User options
-
+# Set default build to specific platform to false
+# Hence only build original (single thread) version
 OPTION(BUILD_OPENCL "OpenCL Build" OFF)
 OPTION(BUILD_CUDA "CUDA Build" OFF)
 OPTION(BUILD_OPENMP "OpenMP Build" OFF)
@@ -25,7 +25,6 @@ MARK_AS_ADVANCED(
   )
 
 # Make Clean
-
 IF(UNIX OR APPLE)
 	ADD_CUSTOM_TARGET(clean_all
 	  ${CMAKE_COMMAND} -E remove -f CMakeCache.txt
