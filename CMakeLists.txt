@@ -5,6 +5,7 @@ SET(TOPDIR ${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE(BEMAPConfig.cmake)
 
 # Build Samples
+ADD_SUBDIRECTORY(src/BEMAPTemplate)
 ADD_SUBDIRECTORY(src/BlackScholes)
 ADD_SUBDIRECTORY(src/GrayScale)
 ADD_SUBDIRECTORY(src/GaussianFilter)
