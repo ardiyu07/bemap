@@ -2,6 +2,10 @@ BEMAPTemplate, Reference Single Thread C++
 =========================================
 
 * Read LICENSE first
+
+* Prerequisites
+CMake - Cross Platform Make
+- http://www.cmake.org/
  
 * Compilation (all projects) in build/
 
