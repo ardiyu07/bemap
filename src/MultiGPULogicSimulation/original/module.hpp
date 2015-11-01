@@ -1,13 +1,30 @@
 #ifndef __MULTIGPULOGICSIMULATION_MODULE_HPP
 #define __MULTIGPULOGICSIMULATION_MODULE_HPP
 
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+
+#include <list>
+#include <vector>
+#include <string>
+#include <map>
+
+#include <cassert>
+#include <cmath>
+
+#include <ctime>
+#include <sys/time.h>
+
 #define MAX_INPUTS 2096    //ゲートへの最大入力数
 #define NUM_VARIABLE 25    //真理値表で扱う変数の数　警告：36以上を設定するとオーバーフロー　真理値表サイズ：（2^NUM_VARIABLE）bit
 #define MAX_GATE 1250      //(NUM_VARIABLE + CASH_GATE) GPUに置ける最大の真理値表の数. GPUのメモリ量に注意.
 #define CASH_GATE 1200     //GPUに置く真理値表の数　MAX_GATEよりも小さい値を設定
 
+using namespace::std;
+
 //ゲートのタイプ分け
-enum ENUM_LOGIC_SIMULATION {
+typedef enum {
     INPUT,      //0 INPUTタイプ
     OUTPUT,     //1 OUTPUTタイプ
     NAND,       //2 NANDタイプ  
@@ -18,7 +35,7 @@ enum ENUM_LOGIC_SIMULATION {
     XOR,        //7 XORタイプ  
     XNOR,       //8 XNORタイプ 
     OTHERGATES  //9 上記以外のタイプ  
-};
+} GateType;
 
 class Module;
 class Gate;
@@ -273,7 +290,7 @@ public:
      *  \param os [in] 出力ストリーム
      */
     void print_name(ostream& os){
-      os<< this->name;; 
+      os<< this->gate_name;
     }
     
     /** \fn string get_name()
@@ -281,7 +298,7 @@ public:
      *  \param
      */
     string get_name(){
-        return(name);
+        return(gate_name);
     }
     
     /** \fn vector<Gate*> get_input_gate()
@@ -360,6 +377,65 @@ public:
      *  \brief デストラクタ (今は何もしない）
      */
     virtual ~Gate(){};
+
+
+    /** \fn int calc_BDDLF()
+     *  \brief BDDLFを計算する
+     *  \retval 0 正常に計算できた
+     *  \retval 1 正常に計算できなかった
+     * 
+     *  ゲートのBDDLFを計算する。直前のゲートのBDDLFはあらかじめ計算しておく
+     *  必要がある。
+     */
+    int calc_BDDLF();
+
+    /** \fn int calc_TBLF()
+     *  \brief TBLFを計算する
+     *  \retval 0 正常に計算できた
+     *  \retval 1 正常に計算できなかった
+     * 
+     *  ゲートのTBLFを計算する。直前のゲートのTBLFはあらかじめ計算しておく
+     *  必要がある。
+     */
+    int calc_TBLF(Module* module);
+    int calc_TBLF_CUDA(Module* module);
+    int calc_TBLF_olev_CUDA(Module* module, int* cash_d, int* input_d);
+    int calc_TBLF_ilev_CUDA(Module* module, int* cash_d, int* input_d);
+
+    /** \fn void print_BDDLF(int input)
+     *  \brief BDDLF表示する
+     *  \param input モジュールの入力ゲート数
+     */
+    void print_BDDLF(int input);
+
+    /** \fn void print_TBLF(int input)
+     *  \brief TBLF表示する
+     */
+    void print_TBLF(Module* module);
+
+    /** \fn bool is_calc_LF()
+     *  \brief LFが計算済みかどうか
+     *  \retval true 計算済み
+     *  \retval false 未計算
+     */
+    bool is_calc_LF() {return calc_LF;}
+
+    /** \fn void set_calcLF(bool calcLF)
+     *  \brief このゲートのLFの計算済みフラグをセットする
+     *  \param calcLF [in] セットするLFの計算済みフラグ
+     *
+     *  このゲートのLFの計算済みフラグをセットする。
+     *
+     */
+    void set_calc_LF(bool calcLF) { calc_LF = calcLF;}
+
+    /** \fn void setBDDLF(BDD calcBDD)
+     *  \brif 
+     *  \param calcBDD セットする計算済みBDD
+     *  
+     *  入力ゲートにBDDを割り当てる
+     * 
+     */
 
 };
 
@@ -480,13 +556,13 @@ public:
             this->gates_.push_back(g); 
         }
         else{
-            if( _gate_type == "and" ) g -> SetType(AND);
-            else if( _gate_type == "or" ) g -> SetType(OR);
-            else if( _gate_type == "nand" ) g -> SetType(NAND);
-            else if( _gate_type == "nor" ) g -> SetType(NOR);
-            else if( _gate_type == "xor" ) g -> SetType(XOR);
-            else if( _gate_type == "xnor" ) g -> SetType(XNOR);
-            else if( _gate_type == "not" ) g -> SetType(NOT);     
+            if( _gate_type == "and" ) g -> set_type(AND);
+            else if( _gate_type == "or" ) g -> set_type(OR);
+            else if( _gate_type == "nand" ) g -> set_type(NAND);
+            else if( _gate_type == "nor" ) g -> set_type(NOR);
+            else if( _gate_type == "xor" ) g -> set_type(XOR);
+            else if( _gate_type == "xnor" ) g -> set_type(XNOR);
+            else if( _gate_type == "not" ) g -> set_type(NOT);     
         }
         
         return g;
@@ -582,7 +658,7 @@ public:
      * 
      *  filenameで指定されたファイルを読み込む
      */
-    void read_verilog( char * filename );
+    void read_verilog( const char * filename );
   
     /** \fn void Module::read_BLIF( char * filename )
      *  \brief 指定されたBLIFファイルを読み込む
@@ -590,7 +666,7 @@ public:
      * 
      *  filenameで指定されたファイルを読み込む
      */
-    void read_BLIF( char * filename );
+    void read_BLIF( const char * filename );
   
     /** \fn Module(std::string description = "")
      *  \brief コンストラクタ
@@ -800,13 +876,6 @@ public:
      *   TBをまだ使う場合はswap-outする
      */
     int del_cash_d_old(int* cash_d);
-    
-    /** \fn int find_cash_d(Gate* gate) 
-     *  \brief ゲート（引数）のTBのGPU上の番地を返す
-     *  flag_cuda_dを見てから検索するので、検索すると必ず見つかるものとする
-     *  \retval ゲート（引数）のTBのGPU上の番地
-     */
-    int find_cash_d(Gate* gate);
 
 };
 

@@ -11,6 +11,7 @@ ADD_SUBDIRECTORY(src/GrayScale)
 ADD_SUBDIRECTORY(src/GaussianFilter)
 ADD_SUBDIRECTORY(src/MonteCarlo)
 ADD_SUBDIRECTORY(src/BackProjection)
+ADD_SUBDIRECTORY(src/MultiGPULogicSimulation)
 
 # User options
 # Set default build to specific platform to false

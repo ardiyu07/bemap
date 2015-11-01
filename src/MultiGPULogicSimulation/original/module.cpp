@@ -1,5 +1,7 @@
 #include "module.hpp"
 
+ofstream out( "SampleOutput.txt" );
+
 //------------------------------------------------------------------------------
 //  "TB (Truth-valu)" class
 //-----------------------------------------------------------------------------
@@ -247,7 +249,7 @@ TB TB::operator+(const TB& other)
         } 
     }
     
-    eturn (tmp);
+    return (tmp);
 }
 
 TB TB::operator*(const TB& other) 
@@ -255,15 +257,15 @@ TB TB::operator*(const TB& other)
     TB tmp;
     //cout << "      *tmp  this " << &tmp << endl;
     
-    if (TBnum_inputs <=5) {
+    if (TB_num_inputs <=5) {
         tmp.truth_table[0] = truth_table[0] & other.truth_table[0];
     } 
-    else if (TBnum_inputs >= 6 && TBnum_inputs <= NUM_VARIABLE) {
-        for (int i=0; i < 1<<(TBnum_inputs-5); i++) {
+    else if (TB_num_inputs >= 6 && TB_num_inputs <= NUM_VARIABLE) {
+        for (int i=0; i < 1<<(TB_num_inputs-5); i++) {
             tmp.truth_table[i] = truth_table[i] & other.truth_table[i];
         } 
     } 
-    else if (TBnum_inputs > NUM_VARIABLE) {
+    else if (TB_num_inputs > NUM_VARIABLE) {
         for (int i=0; i < 1<<(NUM_VARIABLE-5); i++) {
             tmp.truth_table[i] = truth_table[i] & other.truth_table[i];
         } 
@@ -274,15 +276,15 @@ TB TB::operator*(const TB& other)
 
 TB TB::operator!() 
 {
-    if (TBnum_inputs <= 5) {
+    if (TB_num_inputs <= 5) {
         truth_table[0] = ~truth_table[0];
     } 
-    else if (TBnum_inputs >= 6 && TBnum_inputs <= NUM_VARIABLE) {
-        for (int i=0; i < 1<<(TBnum_inputs-5); i++) {
+    else if (TB_num_inputs >= 6 && TB_num_inputs <= NUM_VARIABLE) {
+        for (int i=0; i < 1<<(TB_num_inputs-5); i++) {
             truth_table[i] = ~truth_table[i];
         } 
     } 
-    else if (TBnum_inputs > NUM_VARIABLE) {
+    else if (TB_num_inputs > NUM_VARIABLE) {
         for (int i=0; i < 1<<(NUM_VARIABLE-5); i++) {
             truth_table[i] = ~truth_table[i];
         }
@@ -296,20 +298,20 @@ TB TB::operator=(const TB& other)
         
         delete[] truth_table;
         
-        if (TBnum_inputs <= 5) {
+        if (TB_num_inputs <= 5) {
             truth_table = new int[1];
             truth_table[0] = other.truth_table[0];
         } 
         
-        else if (TBnum_inputs >= 6 && TBnum_inputs <= NUM_VARIABLE) {
-            truth_table = new int[1<<(TBnum_inputs-5)];
-            for (int i=0; i < 1<<(TBnum_inputs-5); i++) {
+        else if (TB_num_inputs >= 6 && TB_num_inputs <= NUM_VARIABLE) {
+            truth_table = new int[1<<(TB_num_inputs-5)];
+            for (int i=0; i < 1<<(TB_num_inputs-5); i++) {
                 truth_table[i] = other.truth_table[i];
             } 
         
         } 
         
-        else if (TBnum_inputs > NUM_VARIABLE) {
+        else if (TB_num_inputs > NUM_VARIABLE) {
             truth_table = new int[1<<(NUM_VARIABLE-5)];
             for (int i=0; i < 1<<(NUM_VARIABLE-5); i++) {
                 truth_table[i] = other.truth_table[i];
@@ -355,7 +357,7 @@ int Gate::calc_olevel()
     if(this->get_olevel() != 0) {
         result = this->get_olevel();
     }
-    //else if(this->GetType() == OUTPUT) result = 0; 
+    //else if(this->get_type() == OUTPUT) result = 0; 
     else{
         std::list<Gate*>::iterator iter = this->output_gates.begin();
         for ( ; iter != output_gates.end() ; iter++) {
@@ -378,7 +380,7 @@ int Gate::calc_ilevel()
     if(this->get_ilevel() != 0) {
         result = this->get_ilevel();
     }
-    else if(this->GetType() == INPUT) {
+    else if(this->get_type() == INPUT) {
         result = 0;
     }
     else{
@@ -430,7 +432,7 @@ int Gate::calc_TBLF(Module* module)   //。直前のゲートのTBLFはあらか
     //cout <<"f truth_table"; f.print();
     //cout <<"(*input[0]) teruth_table"; (*input[0]).print();
   
-    if (this->Type == NOT) {
+    if (this->gate_type == NOT) {
         if (input_gates.size() != 1) {
             cerr << "error: NOTgate can't multiINPUT" << endl;
             exit(1);
@@ -438,7 +440,7 @@ int Gate::calc_TBLF(Module* module)   //。直前のゲートのTBLFはあらか
         (*f) = !(*f);
     }
 
-    if (this->Type == AND) {
+    if (this->gate_type == AND) {
         for (i=1 ; i<num; i++) {
             //cout <<"before f truth_table"; (*f).print();
             //cout <<"before input teruth_table"; (*input[i]).print();
@@ -447,7 +449,7 @@ int Gate::calc_TBLF(Module* module)   //。直前のゲートのTBLFはあらか
         }
     }
 
-    if (this->Type == OR) {
+    if (this->gate_type == OR) {
         for (i=1 ; i<num; i++) {
             //     cout <<"before f teruth_table"; (*f).print();
             // cout <<"before input teruth_table"; (*input[i]).print();
@@ -512,7 +514,7 @@ void Gate::print_in_out()
 
 /** \fn void print(std::ostream& os) 
  *  \brief 内容を表示する    ★incomplete★
- *  \brief 出力形式: gatename gatetype input1_name input2_name 
+ *  \brief 出力形式: gatename get_tatetype input1_name input2_name 
  *  \param os [in] 出力ストリーム
  */
 void Gate::print(std::ostream& os)
@@ -528,7 +530,7 @@ void Gate::print(std::ostream& os)
     else if(this->gate_type == OTHERGATES)  os<< "OTHERGATES ";
     else {
         cerr << "In Gate::Print, currenlty only NAND can be treated\n";
-        cout << "check TYPE " <<  this->gate_name << "gate_type: "<< this->gate_type <<endl;
+        cout << "check get_tYPE " <<  this->gate_name << "gate_type: "<< this->gate_type <<endl;
         exit(1);
     }
     
@@ -565,13 +567,13 @@ Module::~Module()
     }
 }
 
-/** \fn void Module::read_verilog( char * filename );
+/** \fn void Module::read_verilog( const char * filename );
  *  \brief 指定されたファイルを読み込む
  *  \param filename [in] 読み込まれるファイルのファイル名
  * 
  *  filenameで指定されたファイルを読み込む
  */
-void Module::read_verilog( char * filename )
+void Module::read_verilog( const char * filename )
 {
     ifstream c_circuit_data; //ファイルの読み込み用
     
@@ -590,7 +592,7 @@ void Module::read_verilog( char * filename )
         oneword = get_word(oneline); //"module"という単語を飛ばすので2回get_wordを行う
         oneword = get_word(oneline); //スペースを無視して最初のモジュール名をゲット
         if (oneword.at(0) != '#' ){ //＃以降はその行を無視
-            description_ = oneword;
+            this->description = oneword;
             out << "module_name = " << oneword << endl << endl;
             break;
         }
@@ -735,13 +737,13 @@ void Module::read_verilog( char * filename )
     }
 }
 
-/** \fn void Module::read_BLIF( char * filename )
+/** \fn void Module::read_BLIF( const char * filename )
  *  \brief 指定されたBLIFファイルを読み込む
  *  \param filename [in] 読み込まれるファイルのファイル名
  * 
  *  filenameで指定されたファイルを読み込む
  */
-void Module::read_BLIF( char * filename )
+void Module::read_BLIF( const char * filename )
 {
     std::ifstream c_module_data;
     c_module_data.open( filename, std::ios::in );
@@ -766,7 +768,7 @@ void Module::read_BLIF( char * filename )
         //   cerr << "oneword = " << oneword;
         
         if (oneword.at(0) != '#' ) { //＃以降はその行を無視
-            description_ = oneword;
+            this->description = oneword;
             cerr << ".model = " << oneword <<endl;
             break;
         }
@@ -998,7 +1000,7 @@ void Module::read_BLIF( char * filename )
                             for (int i=0; iter != buf_or.end(); i++, ++iter) {
                                 this->connect(*iter ,orgate, i);
                             }
-                            orgate->SetType(OR);
+                            orgate->set_type(OR);
                         }
                     } 
 
@@ -1038,7 +1040,7 @@ void Module::read_BLIF( char * filename )
                             for (int i=0; iter != buf_or.end(); i++, ++iter) {
                               this->connect(*iter ,orgate, i);
                             }
-                            orgate->SetType(OR);
+                            orgate->set_type(OR);
                         }
                     } 
 
@@ -1163,19 +1165,19 @@ int Module::set_olevel_vector()
 
     //全てのゲートをレベル毎に、コンテナのコンテナに仕分けする。
     int maxlevel = get_max_level();
-    olevelVector.resize(maxlevel + 1); //0~maxlevel
+    olevel_vector.resize(maxlevel + 1); //0~maxlevel
 
     iter = gates_.begin();
     while (iter != gates_.end() ) {
         Gate * gate = *iter;
         int level = gate->get_olevel();
-        olevelVector[level].push_back(gate);
+        olevel_vector[level].push_back(gate);
         iter++;
     }
     return(0);    //レベライズ完了
 }
 
-int Module::set_ilevelVector()
+int Module::set_ilevel_vector()
 {
     //全てのゲートの初期化
     std::list<Gate*>::iterator iter = gates_.begin();
@@ -1209,13 +1211,13 @@ int Module::set_ilevelVector()
 
     //全てのゲートをレベル毎に、コンテナのコンテナに仕分けする。
     int maxlevel = get_max_level();
-    ilevelVector.resize(maxlevel + 1); //0~maxlevel
+    ilevel_vector.resize(maxlevel + 1); //0~maxlevel
 
     iter = gates_.begin();
     while (iter != gates_.end() ) {
         Gate * gate = *iter;
         int level = gate->get_ilevel();
-        ilevelVector[level].push_back(gate);
+        ilevel_vector[level].push_back(gate);
         iter++;
     }
 
@@ -1236,20 +1238,6 @@ int Module::calc_TBall()
     return(0);   //正常に計算できた
 }
 
-int Module::calc_TBall_CUDA()
-{
-    std::list<Gate*> output_gatelist = get_outputs();
-    std::list<Gate*>::iterator iter = output_gatelist.begin();  
-    
-    // 全ての出力ゲートのTBLFを計算する
-    while (iter != output_gatelist.end() ) {
-        (*iter)->calc_TBLF_CUDA(this);
-        ++iter;
-    }
-    
-    return(0);   //正常に計算できた
-}
-
 /** \fn void connect(Gate * former_g, Gate * latter_g, int i)
  *  \brief former_gの出力をlatter_gのi番目の入力につなぐ
  *  
@@ -1258,15 +1246,15 @@ int Module::calc_TBall_CUDA()
 void Module::connect(Gate * former_g, Gate * latter_g, int i)
 {
     // .outputs(出力ゲート)が、他のゲートより前に来ること許可 以下5行コメントアウト
-    // assert(former_g->GetType() != OUTPUT);
-    // if(former_g->GetType() == OUTPUT) {
-    //  cout << former_g ->name <<"type: " << former_g->Type << endl;
+    // assert(former_g->get_type() != OUTPUT);
+    // if(former_g->get_type() == OUTPUT) {
+    //  cout << former_g ->name <<"get_type: " << former_g->gate_type << endl;
     //  exit(1);
     //}
-    assert(latter_g->GetType() != INPUT);
+    assert(latter_g->get_type() != INPUT);
     
-    former_g->addOutput(latter_g);
-    latter_g->addInput(former_g, i);
+    former_g->add_output(latter_g);
+    latter_g->add_input(former_g, i);
 }
 
 void Module::simulate_mask_rate()

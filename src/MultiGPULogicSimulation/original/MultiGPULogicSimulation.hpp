@@ -7,6 +7,7 @@
 #include <c_util_getopt.hpp>
 
 #include "MultiGPULogicSimulation_gold.hpp"
+#include "module.hpp"
 
 /* user parameters */
 extern int verbose;
@@ -19,7 +20,7 @@ typedef struct outParam {
 class MultiGPULogicSimulation {
 
 public:
-    MultiGPULogicSimulation(float _alpha, float _beta, int _partNum);
+    MultiGPULogicSimulation(std::string _inputFile);
     ~MultiGPULogicSimulation();
 
 public:
@@ -34,13 +35,9 @@ public:
     /* bemap_template variables */
 private:
 
-    float *memIn;
-    float *memOut;
+    std::string inputFile;
 
-    float alpha;
-    float beta;
-
-    int partNum;
+    Module module;  
 
 private:
 

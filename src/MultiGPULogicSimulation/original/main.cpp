@@ -9,16 +9,18 @@
 
 #include "MultiGPULogicSimulation.hpp"
 
-#define N_ITER 5
+#define DEFAULT_INPUT "../common/data/Blif/alu2.blif"
+
+#define N_ITER 1
+
+using namespace std;
 
 /* User parameters */
 int verbose      = false;
 int showPrepTime = false;
 
 /* MultiGPULogicSimulation parameters */
-float alpha = 0.02f;
-float beta  = 0.30f;
-int partNum = 1 << 20;
+std::string inputFile;
 
 std::string outputFilename;
 
@@ -27,9 +29,6 @@ static struct option longopts[] = {
     { "verbose",         no_argument,            NULL,              'v' },
     { "help",            no_argument,            NULL,              'h' },
     { "output",          required_argument,      NULL,              'o' },
-    { "alpha",           required_argument,      NULL,              'A' },
-    { "beta",        	 required_argument,      NULL,              'B' },
-    { "partnum",         required_argument,      NULL,              'N' },
     { "prep-time",       no_argument,            &showPrepTime,     true},
     { NULL,              0,                      NULL,               0  }
 };
@@ -46,9 +45,6 @@ void help(const std::string & filename)
         << " --verbose             Be verbose"<< std::endl
         << " --help                Print this message"<<std::endl
         << " --output=NAME         Write to this file"<<std::endl
-        << " --alpha=NUMBER        Alpha for dummy calculation -- default - 0.02"<< std::endl
-        << " --beta=NUMBER         Beta for dummy calculation -- default = 0.30"<< std::endl
-        << " --num=INT             Number of elements -- default = 1M Element"<< std::endl
         << " --prep-time           Show initialization, memory preparation and copyback time"<<std::endl
         << std::endl
         << " * Examples *" << std::endl
@@ -89,45 +85,6 @@ void option(int ac, char **av)
             outputFilename = std::string(optarg);
             break;
 
-        /* Alpha */
-        case 'A':
-        {
-            std::istringstream iss(optarg);
-            float a = -1;
-            iss >> a;
-            alpha = a;
-            ERROR_HANDLER((!iss.fail()),
-                          "Invalid argument '" + std::string(optarg) +
-                          "'");
-        }
-        break;
-
-        /* Beta */
-        case 'B':
-        {
-            std::istringstream iss(optarg);
-            float a = -1;
-            iss >> a;
-            beta = a;
-            ERROR_HANDLER((!iss.fail()),
-                          "Invalid argument '" + std::string(optarg) +
-                          "'");
-        }
-        break;
-
-        /* partNum */
-        case 'N':
-        {
-            std::istringstream iss(optarg);
-            int a = -1;
-            iss >> a;
-            partNum = a;
-            ERROR_HANDLER((!iss.fail()),
-                          "Invalid argument '" + std::string(optarg) +
-                          "'");
-        }
-        break;
-
         case 0:
             break;
 
@@ -135,6 +92,23 @@ void option(int ac, char **av)
             ERROR_HANDLER(0, "Error parsing arguments");
         }
     }
+
+    ac -= optind;
+    av += optind;
+
+    if (ac == 0) {
+        std::cout << "Executing with default input: " << DEFAULT_INPUT << std::endl;
+        inputFile = DEFAULT_INPUT;
+        return;
+    }
+
+    ERROR_HANDLER((outputFilename.size() == 0
+                   || ac <= 1),
+                  "Error: --output cannot be used with multiple files");
+
+    inputFile = av[0];
+    ac--;
+    ERROR_HANDLER((ac == 0), "Error: Too many inputs");
 }
 
 int main(int argc, char **argv)
@@ -144,13 +118,10 @@ int main(int argc, char **argv)
 
     verbose && std::cerr << "MultiGPULogicSimulation, CPU Single Thread Implementation"
                          << std::endl << std::endl
-                         << "Alpha          = " << alpha << std::endl
-                         << "Beta           = " << beta << std::endl
-                         << "N Elements     = " << partNum << std::endl
                          << "Show prep time = " << ((showPrepTime)?("True"):("False")) << std::endl
                          << "Executing .. " << std::endl;
 
-    MultiGPULogicSimulation MultiGPULogicSimulation(alpha, beta, partNum);
+    MultiGPULogicSimulation MultiGPULogicSimulation(inputFile);
 
     MultiGPULogicSimulation.init();
     for (int i = 0; i < N_ITER; i++) {
