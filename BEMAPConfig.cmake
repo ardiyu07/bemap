@@ -17,7 +17,7 @@ IF(BUILD_CUDA)
     )
   
   # Set NVCC Flags
-  SET(CUDA_NVCC_FLAGS -O3 -gencode arch=compute_20,code=sm_20 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -lpthread) 
+  SET(CUDA_NVCC_FLAGS -O3 -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=[sm_50,compute_50] -gencode arch=compute_52,code=[sm_52,compute_52] -lpthread) 
 ENDIF()
 
 # Set flag
